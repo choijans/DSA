@@ -149,28 +149,29 @@ Name *getStudent(Queue q, char *program, char sex){
 }
 
 bool insertSorted(Queue *q, Data d) {
-    Queue temp;
-    initQueue(&temp);
-    int check = 0;
+    Queue tempQ;
+    initQueue(&tempQ);
 
-    while (q->head != NULL) {
-        if (strcmp(q->head->elem.studName.lName, d.studName.lName) > 0 && check == 0) {
-            enqueue(&temp, d);  
-            check = 1; 
-        }
-
-        enqueue(&temp, q->head->elem);
-        dequeue(q); 
+    NodePtr newNode = createNode(d);
+    if(newNode == NULL){
+        return false;
+    }
+    
+    while((!isEmpty(*q)) && strcmp(d.studName.lName, q->head->elem.studName.lName) > 0){
+        NodePtr temp = q->head;
+        q->head = temp->link;
+        temp->link = tempQ.head;
+        tempQ.head = temp;
     }
 
-    if (!check) {
-        enqueue(&temp, d);
+    newNode->link = q->head;
+    q->head = newNode; 
+    
+    while(!isEmpty(tempQ)){
+        NodePtr temp = tempQ.head;
+        tempQ.head = temp->link;
+        temp->link = q->head;
+        q->head = temp; 
     }
-
-    while (temp.head != NULL) {
-        enqueue(q, temp.head->elem);
-        dequeue(&temp);
-    }
-
     return true;  
 }
