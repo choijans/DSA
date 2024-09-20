@@ -20,11 +20,11 @@ void main(){
     // insertSorted2(&s, createPerson("T", 21, 'M'));
     // displayStack(s);
     
-    printf("-----PUSH FUNCTION TO TEST SORT STACK-----\n");
-    push(&s, createPerson("G", 12, 'F'));
-    push(&s, createPerson("A", 11, 'M'));
-    push(&s, createPerson("C", 10, 'F'));
-    displayStack(s);
+    // printf("-----PUSH FUNCTION TO TEST SORT STACK-----\n");
+    // push(&s, createPerson("G", 12, 'F'));
+    // push(&s, createPerson("A", 11, 'M'));
+    // push(&s, createPerson("C", 10, 'F'));
+    // displayStack(s);
     
     printf("\n-----PUSH FUNCTION TO TEST SORT STACK-----\n");
     push(&s, createPerson("Z", 19, 'M'));
@@ -32,7 +32,7 @@ void main(){
     push(&s, createPerson("T", 21, 'M'));
     displayStack(s);
     
-    printf("\n-----SORT STACK FUNCTION-----\n");
-    sortStack(&s, false);
+    printf("\n-----SORT STACK 1 FUNCTION-----\n");
+    sortStack2(&s, false);
     displayStack(s);
 }
