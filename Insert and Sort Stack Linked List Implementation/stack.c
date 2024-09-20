@@ -85,29 +85,38 @@ bool insertSorted1(Stack *s, Person p) {
 
 
 /*Insert sorted base on lastname. Remember to use the property 
-  of the stack but without using push, pop, and peek functions.*/
+  of the stack but without using push, pop, and peek functions.*/ //NO TRAVERSAL
 bool insertSorted2(Stack *s, Person p){
-    NodePtr temp = createNode(p);
+    NodePtr node = createNode(p);
+    Stack tempS;
+    initStack(&tempS);
     
-    if(isEmpty(*s) || strcmp((*s)->data.name, p.name) > 0){
+    if(node == NULL){
+        return false; 
+    }
+    
+    while(!isEmpty(*s) && strcmp(p.name, (*s)->data.name) > 0){
+        NodePtr temp = *s;
+        *s = temp->link;
+        temp->link = tempS;
+        tempS = temp; 
+    }
+    
+    node->link = *s;
+    *s = node;
+    
+    while(!isEmpty(tempS)){
+        NodePtr temp = tempS;
+        tempS = temp->link;
         temp->link = *s;
-        *s = temp;
-        return true;
+        *s = temp; 
     }
-    
-    NodePtr trav = *s;
-    while (trav->link != NULL && (strcmp(trav->link->data.name, p.name) < 0)) {
-        trav = trav->link;
-    }
-    
-    temp->link = trav->link;
-    trav->link = temp;
     return true;
 }
 
 /*Sort the values based on name. Use flag for ascending 
   or descending. */
-void sortStack(Stack *s, bool flag){
+void sortStack1(Stack *s, bool flag){
     Stack temp;
     initStack(&temp);
      
@@ -129,3 +138,31 @@ void sortStack(Stack *s, bool flag){
     }
 }
 
+
+//SORT STACK without push pop peek and NO TRAVERSAL
+void sortStack2(Stack *s, bool flag) {
+    Stack tempS;
+    initStack(&tempS);
+    
+    while (!isEmpty(*s)) {
+        NodePtr temp = *s;
+        *s = (*s)->link;
+        
+        while (!isEmpty(tempS) && ((flag && strcmp(tempS->data.name, temp->data.name) > 0) || (!flag && strcmp(tempS->data.name, temp->data.name) < 0))){
+            NodePtr tempTop = tempS;
+            tempS = tempS->link;
+            tempTop->link = *s;
+            *s = tempTop;
+        }
+        
+        temp->link = tempS;
+        tempS = temp;
+    }
+    
+    while (!isEmpty(tempS)) {
+        NodePtr tempTop = tempS;
+        tempS = tempS->link;
+        tempTop->link = *s;
+        *s = tempTop;
+    }
+}
