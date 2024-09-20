@@ -33,6 +33,10 @@ bool insertSorted2(Stack *s, Person p);
 
 /*Sort the values based on name. Use flag for ascending 
   or descending. */
-void sortStack(Stack *s, bool flag);
+void sortStack1(Stack *s, bool flag);
+
+/*Sort the values based on name. Use flag for ascending 
+  or descending. NO PUSH POP PEEK AND NO TRAVERSAL*/
+void sortStack2(Stack *s, bool flag);
 
 #endif
