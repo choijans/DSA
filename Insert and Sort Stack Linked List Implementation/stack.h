@@ -16,7 +16,8 @@ typedef struct node{
 Person createPerson(char name[30], int age, char sex);
 void initStack(Stack *s);
 bool isEmpty(Stack s);
-void displayStack(Stack s);
+void displayStack1(Stack s);
+void displayStack2(Stack s); //no traversal, push, pop, peek
 
 NodePtr createNode(Person p);
 bool push(Stack *s, Person p);
