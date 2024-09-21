@@ -19,8 +19,11 @@ void main(){
     // Name *list = getStudent(q, "BSIT", 'm');
     
     insertSorted(&q, createStudent(23102442, createName("Jansen", "Choi"), "BSIT", 'm'));
+    //USING NEW DISPLAY FUNCTION THAT DOES NOT USE TRAVERSAL, ENQUEUE, DEQUEUE, FRONT
+    display(q);
     insertSorted(&q, createStudent(23102689, createName("Jio", "Delgado"), "BSCS", 'f'));
+    display(q);
     insertSorted(&q, createStudent(21101024, createName("Josh", "Ai"), "BSIT", 'm'));
-    visualize(q);
+    display(q);
 
 }
