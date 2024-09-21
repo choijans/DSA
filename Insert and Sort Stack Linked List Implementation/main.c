@@ -12,27 +12,27 @@ void main(){
     // insertSorted1(&s, createPerson("G", 12, 'F'));
     // insertSorted1(&s, createPerson("A", 11, 'M'));
     // insertSorted1(&s, createPerson("C", 10, 'F'));
-    // displayStack(s);
+    // displayStack1(s);
     
     // printf("\n-----INSERT SORTED 2 FUNCTION-----\n");
     // insertSorted2(&s, createPerson("Z", 19, 'M'));
     // insertSorted2(&s, createPerson("N", 20, 'F'));
     // insertSorted2(&s, createPerson("T", 21, 'M'));
-    // displayStack(s);
+    // displayStack1(s);
     
     // printf("-----PUSH FUNCTION TO TEST SORT STACK-----\n");
     // push(&s, createPerson("G", 12, 'F'));
     // push(&s, createPerson("A", 11, 'M'));
     // push(&s, createPerson("C", 10, 'F'));
-    // displayStack(s);
+    // displayStack1(s);
     
     printf("\n-----PUSH FUNCTION TO TEST SORT STACK-----\n");
     push(&s, createPerson("Z", 19, 'M'));
     push(&s, createPerson("N", 20, 'F'));
     push(&s, createPerson("T", 21, 'M'));
-    displayStack(s);
+    displayStack2(s);
     
     printf("\n-----SORT STACK 1 FUNCTION-----\n");
     sortStack2(&s, false);
-    displayStack(s);
+    displayStack2(s);
 }
