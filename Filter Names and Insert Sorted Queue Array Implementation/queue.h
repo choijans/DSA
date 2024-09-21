@@ -20,7 +20,8 @@ Name createName(char fName[], char lName[]);
 void initNQueue(NQueue *nq);
 bool isEmpty(NQueue nq);
 bool isFull(NQueue nq);
-void displayQueue(NQueue nq);
+void displayQueue1(NQueue nq);
+void displayQueue2(NQueue nq);
 
 bool enqueue(NQueue *nq, Name n);
 bool dequeue(NQueue *nq);
