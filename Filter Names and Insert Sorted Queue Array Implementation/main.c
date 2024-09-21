@@ -12,11 +12,11 @@ void main(){
     enqueue(&n1, createName("Jio", "Choi"));
     enqueue(&n1, createName("Josh", "Lui"));
     enqueue(&n1, createName("JL", "Codilla"));
-    displayQueue(n1);
+    displayQueue1(n1);
     
     printf("\n-----FILTER NAMES FUNCTION\n");
     Name *nameArray = filterNames(&n1, "Choi");
-    displayQueue(n1);
+    displayQueue1(n1);
     displayNames(nameArray);
     
     NQueue n2; 
@@ -26,5 +26,6 @@ void main(){
     insertSorted(&n2, createName("Jio", "Choi"));
     insertSorted(&n2, createName("Josh", "Delgado"));
     insertSorted(&n2, createName("Test", "Ai"));
-    displayQueue(n2);
+    //NEW DISPLAY FUNCTION WITHOUT ENQUEUE DEQUEUE FRONT AND TRAVERSAL
+    displayQueue2(n2);
 }
