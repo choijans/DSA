@@ -32,7 +32,31 @@ bool isEmpty(Queue q){
 }
 
 void display(Queue q){
-    
+    Queue tempQ;
+    initQueue(&tempQ);
+    printf("DATA: {");
+    while(q.head != NULL){
+        NodePtr temp = q.head;
+        q.head = temp->link;
+        printf("\n[\n\tStudent ID: %d\n", temp->elem.studID);
+        printf("\tStudent Name: %s %s\n", temp->elem.studName.fName, temp->elem.studName.lName);
+        printf("\tProgram: %s\n", temp->elem.program);
+        printf("\tSex: %c\n]", temp->elem.sex);
+        
+        if(tempQ.head == NULL){
+            tempQ.head = temp;
+        } else {
+            tempQ.tail->link = temp;
+        }
+        tempQ.tail = temp;
+    }
+
+    if (q.head != NULL){
+        tempQ.tail->link = q.head;
+    }
+    q.head = tempQ.head;
+    q.tail = tempQ.tail;
+    printf("\n}\n");
 }
 
 void visualize(Queue q){
