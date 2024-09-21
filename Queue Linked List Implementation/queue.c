@@ -148,6 +148,7 @@ Name *getStudent(Queue q, char *program, char sex){
     return n;
 }
 
+//WITHOUT ENQUEUE DEQUEUE N FRONT FUNCTION N NO TRAVERSAL
 bool insertSorted(Queue *q, Data d) {
     Queue tempQ;
     initQueue(&tempQ);
@@ -157,21 +158,30 @@ bool insertSorted(Queue *q, Data d) {
         return false;
     }
     
-    while((!isEmpty(*q)) && strcmp(d.studName.lName, q->head->elem.studName.lName) > 0){
+    while(q->head != NULL && strcmp(d.studName.lName, q->head->elem.studName.lName) > 0){
         NodePtr temp = q->head;
         q->head = temp->link;
-        temp->link = tempQ.head;
-        tempQ.head = temp;
+        if(tempQ.head == NULL){
+            tempQ.head = temp;
+        } else {
+            tempQ.tail->link = temp;
+        }
+        tempQ.tail = temp;
+        
     }
 
-    newNode->link = q->head;
-    q->head = newNode; 
-    
-    while(!isEmpty(tempQ)){
-        NodePtr temp = tempQ.head;
-        tempQ.head = temp->link;
-        temp->link = q->head;
-        q->head = temp; 
+    if(tempQ.head == NULL){
+        tempQ.head = newNode;
+    } else {
+        tempQ.tail->link = newNode;
     }
+    
+    tempQ.tail = newNode;
+    if (q->head != NULL){
+        tempQ.tail->link = q->head;
+    }
+    
+    q->head = tempQ.head;
+    q->tail = tempQ.tail;
     return true;  
 }
