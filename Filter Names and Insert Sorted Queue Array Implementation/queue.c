@@ -26,13 +26,40 @@ bool isFull(NQueue nq){
     return (nq.head == (nq.tail + 2) % MAX) ? true : false; 
 }
 
-void displayQueue(NQueue nq){
+void displayQueue1(NQueue nq){
     printf("DATA: {\n");
     while(!isEmpty(nq)){
         Name n = front(nq);
         printf("%s, %s\n", n.lName, n.fName);
         dequeue(&nq);
     }
+    printf("}\n");
+}
+
+void displayQueue2(NQueue nq){
+    printf("DATA: {\n");
+    
+    NQueue temp;
+    initNQueue(&temp);
+    
+    int i = nq.head;
+    int tempTail = temp.head;
+    
+    for(; i != (nq.tail + 1) % MAX; i = (i + 1) % MAX){
+        printf("%s, %s\n", nq.elems[i].lName, nq.elems[i].fName);
+        temp.elems[tempTail] = nq.elems[i];
+        tempTail = (tempTail + 1) % MAX;
+    }
+
+    temp.tail = (tempTail - 1 + MAX) % MAX;
+
+    i = temp.head;
+    tempTail = nq.head;
+    for(; i != (temp.tail + 1) % MAX; i = (i + 1) % MAX){
+        nq.elems[tempTail] = temp.elems[i];
+        tempTail = (tempTail + 1) % MAX;
+    }
+    
     printf("}\n");
 }
 
@@ -115,11 +142,33 @@ bool insertSorted(NQueue *nq, Name n){
     if(isFull(*nq)){
         return false;
     }
-    int i;
-    for(i = nq->tail; i >= nq->head && strcmp(nq->elems[i].lName, n.lName) > 0; --i){
-        nq->elems[(i + 1) % MAX] = nq->elems[i];
+    
+    NQueue temp;
+    initNQueue(&temp);
+    
+    int i = nq->head;
+    int tempTail = temp.head;
+    
+    for(; i != (nq->tail + 1) % MAX && strcmp(nq->elems[i].lName, n.lName) < 0; i = (i + 1) % MAX){
+        temp.elems[tempTail] = nq->elems[i];
+        tempTail = (tempTail + 1) % MAX;
     }
-    nq->elems[(i + 1) % MAX] = n;
-    nq->tail = (nq->tail + 1) % MAX;
+    
+    temp.elems[tempTail] = n;
+    tempTail = (tempTail + 1) % MAX;
+    
+    while (i != (nq->tail + 1) % MAX) {
+        temp.elems[tempTail] = nq->elems[i];
+        tempTail = (tempTail + 1) % MAX;
+        i = (i + 1) % MAX;
+    }
+
+    temp.tail = (tempTail - 1 + MAX) % MAX;
+
+    nq->head = temp.head;
+    nq->tail = temp.tail;
+    for (int j = temp.head; j != (temp.tail + 1) % MAX; j = (j + 1) % MAX) {
+        nq->elems[j] = temp.elems[j];
+    }
     return true;
 }
