@@ -20,7 +20,7 @@ bool isEmpty(Stack s){
     return (s == NULL);    
 }
 
-void displayStack(Stack s){
+void displayStack1(Stack s){
     printf("DATA: {\n");
     if(!isEmpty(s)){
         while(s != NULL){
@@ -30,6 +30,27 @@ void displayStack(Stack s){
             }
             s = s->link;
         }
+    }
+    printf("\n}\n");
+}
+
+void displayStack2(Stack s){
+    Stack tempS;
+    initStack(&tempS);
+    printf("DATA: {\n");
+    while(!isEmpty(s)){
+        NodePtr temp = s;
+        s = temp->link;
+        printf("%s ", temp->data.name);
+        temp->link = tempS;
+        tempS = temp; 
+    }
+    
+    while(!isEmpty(tempS)){
+        NodePtr temp = tempS;
+        tempS = temp->link;
+        temp->link = s;
+        s = temp; 
     }
     printf("\n}\n");
 }
