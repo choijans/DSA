@@ -76,8 +76,9 @@ void visualize(Queue q){
 }
 
 void makeNull(Queue *q){
-    q->head = NULL;
-    q->tail = NULL;
+    while(!isEmpty(*q)){
+        dequeue(q);
+    }
 }
 
 bool enqueue(Queue *q, Data d){
