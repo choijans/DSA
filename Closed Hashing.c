@@ -19,6 +19,7 @@ typedef struct {
     int max; 
 } StudDict;
 
+void resizeDictionary(StudDict *sd);
 Student createStudent(int studID, char studName[16], char program[8], bool sex, int level);
 int getHash(Student s); 
 void initDict(StudDict *sd);
@@ -43,6 +44,28 @@ void main(){
     Student temp = getStudent(sd, createStudent(25, "jio", "bsis", true, 3));
     
     printf("%d", temp.studID);
+}
+
+void resizeDictionary(StudDict *sd){
+    StudDict temp;
+    
+    temp.data = malloc(sizeof(Student) * (sd->max *2));
+    temp.count = 0;
+    temp.max = sd->max * 2;
+    
+    for (int i = 0; i < temp.max; ++i) {
+        temp.data[i].studID = 0; 
+    }
+    
+    int hash; 
+    for (int i = 0; i < sd->max; ++i){
+        for (hash = getHash(sd->data[i]); temp.data[hash].studID != 0 && sd->data[i].studID != -1; hash = (hash+1) % temp.max){}
+            temp.data[hash] = sd->data[i];
+            temp.count++;
+    }
+    
+    free(sd->data);
+    *sd = temp;
 }
 
 Student createStudent(int studID, char studName[16], char program[8], bool sex, int level){
@@ -79,7 +102,7 @@ bool insertStudent(StudDict *sd, Student s){
     int hash = getHash(s);
     
     if(sd->count > MAX * 0.8){
-        return false;
+        resizeDictionary(sd);
     }
     
     if(sd->data[hash].studID == 0 || sd->data[hash].studID == -1){
