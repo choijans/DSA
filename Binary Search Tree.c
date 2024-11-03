@@ -11,13 +11,14 @@ typedef struct node {
 } NodeType, *NodePtr, *BST;
 
 bool insertBST(BST *bst, int data);
+void deleteBST(BST *bst, int data);
 void initBST(BST *bst);
 void displayBST(BST *bst);
 void preorder(BST b);
 void inorder(BST b);
 void bfs(BST b);
 
-void main(){
+int main(){
     BST tree;
     initBST(&tree);
     
@@ -27,9 +28,27 @@ void main(){
     insertBST(&tree, 1);
     insertBST(&tree, 9);
     insertBST(&tree, 16);
-    insertBST(&tree, 16);
+    insertBST(&tree, 8);
+    insertBST(&tree, 11);
+    insertBST(&tree, 13);
+    insertBST(&tree, 14);
     
     inorder(tree);
+    printf("\n");
+    
+    deleteBST(&tree, 14);
+    inorder(tree);
+    printf("\n");
+    
+    deleteBST(&tree, 16);
+    inorder(tree);
+    printf("\n");
+    
+    deleteBST(&tree, 5);
+    inorder(tree);
+    printf("\n");
+    
+    return 0;
 }
 
 bool insertBST(BST *bst, int data){
@@ -54,6 +73,50 @@ bool insertBST(BST *bst, int data){
     }
 }
 
+void deleteBST(BST *bst, int data){
+    NodePtr *trav = bst, temp;
+    NodePtr *trav2;
+
+    
+    while(*trav != NULL && (*trav)->data != data){
+        trav = ((*trav)->data > data) ? &(*trav)->left : &(*trav)->right;
+    }
+    
+    //successor (main difference in the part where it looks for a parent with 2 childs)
+    // if(*trav != NULL){
+    //     if((*trav)->left == NULL){
+    //         temp = *trav; 
+    //         *trav = temp->right; 
+    //     } else if((*trav)->right == NULL){
+    //         temp = *trav; 
+    //         *trav = temp->left; 
+    //     } else {
+    //         for(trav2 = &(*trav)->right; (*trav2)->left != NULL; trav2 = &(*trav2)->left){}
+    //         temp = *trav2; 
+    //         *trav2 = temp->right; 
+    //         (*trav)->data = temp->data; 
+    //     }
+    //     free(temp);
+    // }
+    
+    //predecessor
+    if(*trav != NULL){
+        if((*trav)->left == NULL){
+            temp = *trav; 
+            *trav = temp->right; 
+        } else if((*trav)->right == NULL){
+            temp = *trav; 
+            *trav = temp->left; 
+        } else {
+            for(trav2 = &(*trav)->left; (*trav2)->right != NULL; trav2 = &(*trav2)->right){}
+            temp = *trav2; 
+            *trav2 = temp->left; 
+            (*trav)->data = temp->data; 
+        }
+        free(temp);
+    }
+}
+
 void initBST(BST *bst){
     *bst = NULL;
 }
@@ -64,6 +127,7 @@ void preorder(BST b){
         preorder(b->left);
         preorder(b->right);
     }
+    
 }
 
 void inorder(BST b){
@@ -72,8 +136,4 @@ void inorder(BST b){
         printf("%d ", b->data);
         inorder(b->right);
     }
-}
-
-void bfs(BST b){
-    
 }
