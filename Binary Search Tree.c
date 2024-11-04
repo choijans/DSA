@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -7,16 +6,26 @@
 typedef struct node {
     int data;
     struct node *left;
-    struct node *right;
+    struct node *right; 
 } NodeType, *NodePtr, *BST;
 
+typedef struct qNode {
+    NodePtr elem;
+    struct qNode *link;
+} *qNodePtr;
+
+typedef struct {
+    qNodePtr head;
+    qNodePtr tail;
+} Queue;
+
+void initBST(BST *bst);
 bool insertBST(BST *bst, int data);
 void deleteBST(BST *bst, int data);
-void initBST(BST *bst);
-void displayBST(BST *bst);
-void preorder(BST b);
-void inorder(BST b);
-void bfs(BST b);
+void inorder(BST bst);
+void preorder(BST bst);
+void postorder(BST bst);
+void bfs(BST bst);
 
 int main(){
     BST tree;
@@ -34,8 +43,8 @@ int main(){
     insertBST(&tree, 14);
     
     inorder(tree);
-    printf("\n");
     
+    printf("\n");
     deleteBST(&tree, 14);
     inorder(tree);
     printf("\n");
@@ -48,7 +57,14 @@ int main(){
     inorder(tree);
     printf("\n");
     
+    printf("[BFS]:\n");
+    bfs(tree);
+    
     return 0;
+}
+
+void initBST(BST *bst){
+    *bst = NULL;
 }
 
 bool insertBST(BST *bst, int data){
@@ -56,84 +72,105 @@ bool insertBST(BST *bst, int data){
     
     while(*trav != NULL && (*trav)->data != data){
         trav = ((*trav)->data > data) ? &(*trav)->left : &(*trav)->right;
-        //shortcut ternary
-        // if((*trav)->data > data){
-        //     trav = &(*trav)->left;
-        // } else if((*trav)->data < data){
-        //     trav = &(*trav)->right;
-        // }
     }
-
+    
     if(*trav == NULL){
         *trav = calloc(1, sizeof(NodeType));
-        (*trav)->data = data;
-        return true;
+        if(*trav != NULL){
+            (*trav)->data = data;
+            return true; 
+        }
     } else {
-        return false; 
+        return false;
     }
 }
 
 void deleteBST(BST *bst, int data){
-    NodePtr *trav = bst, temp;
-    NodePtr *trav2;
-
+    NodePtr *trav, *trav2, temp;
+    trav = bst;
     
     while(*trav != NULL && (*trav)->data != data){
-        trav = ((*trav)->data > data) ? &(*trav)->left : &(*trav)->right;
+        trav = (*trav)->data > data ? &(*trav)->left : &(*trav)->right;
     }
     
-    //successor (main difference in the part where it looks for a parent with 2 childs)
-    // if(*trav != NULL){
-    //     if((*trav)->left == NULL){
-    //         temp = *trav; 
-    //         *trav = temp->right; 
-    //     } else if((*trav)->right == NULL){
-    //         temp = *trav; 
-    //         *trav = temp->left; 
-    //     } else {
-    //         for(trav2 = &(*trav)->right; (*trav2)->left != NULL; trav2 = &(*trav2)->left){}
-    //         temp = *trav2; 
-    //         *trav2 = temp->right; 
-    //         (*trav)->data = temp->data; 
-    //     }
-    //     free(temp);
-    // }
-    
-    //predecessor
     if(*trav != NULL){
         if((*trav)->left == NULL){
-            temp = *trav; 
-            *trav = temp->right; 
+            temp = *trav;
+            *trav = temp->right;
         } else if((*trav)->right == NULL){
-            temp = *trav; 
-            *trav = temp->left; 
+            temp = *trav;
+            *trav = temp->left;
         } else {
-            for(trav2 = &(*trav)->left; (*trav2)->right != NULL; trav2 = &(*trav2)->right){}
-            temp = *trav2; 
-            *trav2 = temp->left; 
-            (*trav)->data = temp->data; 
+            for(trav2 = &(*trav)->right; (*trav2)->left != NULL; trav2 = &(*trav2)->left) {}
+            temp = *trav2;
+            *trav2 = temp->left;
+            (*trav)->data = temp->data;
         }
         free(temp);
     }
 }
 
-void initBST(BST *bst){
-    *bst = NULL;
-}
-
-void preorder(BST b){
-    if(b != NULL){
-        printf("%d ", b->data);
-        preorder(b->left);
-        preorder(b->right);
+//LNR
+void inorder(BST bst){
+    if(bst != NULL){
+        inorder(bst->left);
+        printf("%d ", bst->data);
+        inorder(bst->right);
     }
-    
 }
 
-void inorder(BST b){
-    if(b != NULL){
-        inorder(b->left);
-        printf("%d ", b->data);
-        inorder(b->right);
+//NLR
+void preorder(BST bst){
+    if(bst != NULL){
+        printf("%d ", bst->data);
+        preorder(bst->left);
+        preorder(bst->right);
+    }
+}
+
+//LRN
+void postorder(BST bst){
+    if(bst != NULL){
+        postorder(bst->left);
+        postorder(bst->right);
+        printf("%d ", bst->data);
+    }
+}
+
+void bfs(BST bst){
+    Queue q; 
+    
+    qNodePtr temp = malloc(sizeof(struct qNode));
+    temp->elem = bst;
+    
+    q.head = temp;
+    q.tail = temp;
+    
+    while(q.head != NULL){
+        printf("%d ", q.head->elem->data);
+        //enqueue
+        if(q.head->elem->left != NULL){
+           temp = malloc(sizeof(struct qNode));
+           temp->elem = q.head->elem->left;
+           if(q.head == NULL){
+               q.head = temp;
+           } else {
+               q.tail->link = temp;
+           }
+           q.tail = temp;
+        } 
+        if(q.head->elem->right != NULL){
+            temp = malloc(sizeof(struct qNode));
+            temp->elem = q.head->elem->right;
+            if(q.head == NULL){
+                q.head = temp;
+            } else {
+                q.tail->link = temp;
+            }
+            q.tail = temp; 
+        }
+        qNodePtr toDel = q.head;
+        q.head = q.head->link; 
+        free(toDel);
     }
 }
