@@ -29,7 +29,7 @@ void mayWeather(int matrix[][6], int newMat[][6]){
     for(i = 0; i < 6; ++i){
         for(j = 0; j < 6; ++j){
             for(k = 0; k < 6; ++k){
-                if(newMat[j][i] + newMat[i][k] < newMat[j][k] && newMat[i][k] != 0){
+                if(newMat[j][i] + newMat[i][k] < newMat[j][k]){
                     newMat[j][k] = newMat[j][i] + newMat[i][k];
                 }
             }
